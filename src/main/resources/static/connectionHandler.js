@@ -8,7 +8,10 @@ function showMessage(user, value) {
 }
 
 function connect() {
-    client = Stomp.client('wss://websocket-web-poc.herokuapp.com:8080/chat')
+    const protocol = location.protocol.replace('http', 'ws')
+    const url = protocol + "//" + document.domain + ":" + 8080 + "/chat"
+    console.log("Connecting to url: " + url)
+    client = Stomp.client(url)
     client.connect({}, function () {
         console.log('connected')
         client.subscribe("/topic/messages", function (message) {
