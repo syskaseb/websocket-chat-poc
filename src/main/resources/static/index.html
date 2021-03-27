@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <title>Hello App</title>
 </head>
-<body>
+<body onload="connect()">
+<div>
+    <label>
+        User:
+        <input id="user" type="text">
+    </label>
+</div>
 <div>
     <label>
         Message:
-        <input type="text">
+        <input id="messageToSend" type="text">
     </label>
-    <button>Send</button>
-    <p></p>
+    <button onclick="sendMessage()">
+        Send
+    </button>
+    <p id="response"></p>
 </div>
+<script src="connectionHandler.js"></script>
+<script src="stomp.2.3.3.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@1.2.5
+
 workflows:
   version: 2.1
   Check, Build and Test:
@@ -9,6 +12,18 @@ workflows:
       - Test:
           requires:
             - Build
+
+  Deploy:
+    jobs:
+      - Trigger Deploy:
+          type: approval
+          filters:
+            branches:
+              only: /.*/
+
+      - Deploy to Heroku:
+          requires:
+            - Trigger Deploy
 
 jobs:
   Static Analysis:
@@ -76,3 +91,10 @@ jobs:
       - run:
           name: Run tests
           command: gradle test
+
+  Deploy to Heroku:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git

@@ -34,6 +34,8 @@ dependencies {
     implementation("org.springframework.integration:spring-integration-http")
     implementation("org.springframework.integration:spring-integration-stomp")
     implementation("org.springframework.integration:spring-integration-websocket")
+    implementation("org.json:json:20210307")
+    implementation("com.google.code.gson:gson:2.8.6")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
