@@ -9,7 +9,7 @@ function showMessage(user, value) {
 
 function connect() {
     const protocol = location.protocol.replace('http', 'ws')
-    const url = protocol + "//" + document.domain + ":" + 31112 + "/chat"
+    const url = protocol + "//" + document.domain + ":" + 8080 + "/chat"
     console.log("Connecting to url: " + url)
     client = Stomp.client(url)
     client.connect({}, function () {
