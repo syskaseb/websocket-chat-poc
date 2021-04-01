@@ -9,21 +9,20 @@ function showMessage(user, value) {
 
 function connect() {
     const protocol = location.protocol.replace('http', 'ws')
-    const url = protocol + "//" + document.domain + ":" + location.port + "/chat"
+    const url = protocol + "//" + document.domain + ":" + location.port + "/myHandler"
     console.log("Connecting to url: " + url)
-    client = Stomp.client(url)
-    client.connect({}, function () {
+    client = new WebSocket(url)
+    client.onopen = () => {
         console.log('connected')
-        client.subscribe("/topic/messages", function (message) {
-            console.log('message received: ' + message.body)
-            let json = JSON.parse(message.body)
-            showMessage(json["user"], json["message"])
-        })
-    })
+        client.send("Here's some text that the server is urgently awaiting!");
+    }
+    client.onmessage = function (event) {
+        console.log('server message:  ' + event.data);
+    }
 }
 
 function sendMessage() {
     const user = document.getElementById('user').value
     const messageToSend = document.getElementById('messageToSend').value
-    client.send("/app/chat", {}, JSON.stringify({'user': user, 'message': messageToSend}))
+    // client.send("/app/chat", {}, JSON.stringify({'user': user, 'message': messageToSend}))
 }
