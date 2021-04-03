@@ -9,7 +9,7 @@ function showMessage(user, value) {
 
 function connect() {
     const protocol = location.protocol.replace('http', 'ws')
-    const url = protocol + "//" + document.domain + ":" + location.port + "/myHandler"
+    const url = protocol + "//" + document.domain + ":" + location.port + "/games/tictactoe"
     console.log("Connecting to url: " + url)
     client = new WebSocket(url)
     client.onopen = () => {

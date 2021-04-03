@@ -14,12 +14,10 @@ class MyHandler : TextWebSocketHandler() {
         println("client ${session.id} connected")
         cnt++
         if (cnt % 2 != 0) {
-            val room = Room()
-            room.sessions.add(session)
             rooms.add(Room())
-        } else {
-            rooms.last().sessions.add(session)
         }
+        rooms.last().sessions.add(session)
+        session.sendMessage(TextMessage("client joined room ${rooms.lastIndex}"))
         println("rooms count: ${rooms.count()}")
     }
 
