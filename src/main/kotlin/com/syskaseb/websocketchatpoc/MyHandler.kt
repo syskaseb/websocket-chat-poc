@@ -1,5 +1,6 @@
 package com.syskaseb.websocketchatpoc
 
+import org.json.JSONObject
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
@@ -17,15 +18,38 @@ class MyHandler : TextWebSocketHandler() {
             rooms.add(Room())
         }
         rooms.last().sessions.add(session)
-        session.sendMessage(TextMessage("client joined room ${rooms.lastIndex}"))
+        session.sendMessage(
+            TextMessage(
+                JSONObject().put("server_message", "client joined room ${rooms.lastIndex}").toString()
+            )
+        )
         println("rooms count: ${rooms.count()}")
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
         println("received message: ${message.payload}")
-        session.sendMessage(TextMessage("Some important server message to the current session"))
+        println(JSONObject(message.payload).getString("eventType"))
+        val eventMessage = JSONObject(message.payload).getJSONObject("eventMessage")
+        println("[rowIndex, colIndex]: [${eventMessage.getInt("rowIndex")}, ${eventMessage.getInt("colIndex")}]")
+        session.sendMessage(
+            TextMessage(
+                JSONObject().put(
+                    "server_message",
+                    "Some important server message to the current session"
+                ).toString()
+            )
+        )
         rooms.forEachIndexed { index, room ->
-            room.sessions.forEach { it.sendMessage(TextMessage("Server message to room $index")) }
+            room.sessions.forEach {
+                it.sendMessage(
+                    TextMessage(
+                        JSONObject().put(
+                            "server_message",
+                            "Server message to room $index"
+                        ).toString()
+                    )
+                )
+            }
         }
     }
 

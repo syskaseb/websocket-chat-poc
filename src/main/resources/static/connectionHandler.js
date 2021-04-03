@@ -14,10 +14,18 @@ function connect() {
     client = new WebSocket(url)
     client.onopen = () => {
         console.log('connected')
-        client.send("Here's some text that the server is urgently awaiting!");
+        client.send(JSON.stringify({
+            "eventType": "field_clicked",
+            "eventMessage": {
+                "gameId": "game1",
+                "rowIndex": 1,
+                "colIndex": 2
+            }
+        }));
     }
     client.onmessage = function (event) {
-        console.log('server message:  ' + event.data);
+        const json = JSON.parse(event.data)
+        console.log('server message:  ' + json["server_message"]);
     }
 }
 
